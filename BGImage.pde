@@ -2,7 +2,7 @@ class BGImage {
   String imageURL;
   int sceneNum;
   int listNum;
-  PImage[] scene = new PImage[5];
+  PImage scene;
   PFont polya;
 
   BGImage(String imageURL, int sceneNum) {
@@ -15,15 +15,15 @@ class BGImage {
   }
 
   void update() {
-    scene[sceneNum] = loadImage(imageURL);
-    scene[sceneNum].resize(width, height);
+    scene = loadImage(imageURL);
+    scene.resize(width, height);
   }
 
   void scene0(String text1, String text2) {
     fill(255, 0, 0, 20);
 
-    rect(30, 20, 100, width - 100, 7);
-    image(scene[0], 0, 0);
+    rect(width/2, height/2, width-100, height/2, 70);
+    image(scene , 0, 0);
     polya = createFont("POLYA.ttf", 150);
     textFont(polya);
 

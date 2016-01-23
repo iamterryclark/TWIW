@@ -3,10 +3,13 @@ import com.temboo.Library.Yahoo.Weather.*;
 
 float x, x2, y ,y2;
 int stateNum = 0;
+int imageNum = 0;
+String bgimages = "first-background.jpg";
+
 //Initialise all Classes
 GetWeather getWeather = new GetWeather("SE4");
 GameState gameState = new GameState(stateNum);
-BGImage bgimage = new BGImage("first-background.jpg", 0);
+BGImage bgimage = new BGImage(bgimages, stateNum);
 
 void setup() {
   size(1024, 600);
@@ -18,7 +21,9 @@ void setup() {
 }
 
 void draw() { 
+  
   gameState.run();
+  
   
   fill(255,0,0);
   noStroke();
@@ -27,7 +32,7 @@ void draw() {
   ellipse(x, height - height/4 + y, 10,10);
   
   //Sun
-  ellipse(x2 + 100, height-100 + y2, 100,100);
+  //ellipse(x2 + 100, height-100 + y2, 100,100);
 }
 
 void keyPressed(){
