@@ -4,15 +4,22 @@ import com.temboo.Library.Yahoo.Weather.*;
 float x, x2, y ,y2;
 int stateNum = 0;
 int imageNum = 0;
-String bgimages = "first-background.jpg";
+String[] bgimages = {
+                      "first-background.jpg",
+                      "second-background.jpg",
+                      "third-background.jpg",
+                      "fourth-background.jpg",
+                      "fifth-background.jpg",
+                      "sixth-background.jpg",
+                    };
 
 //Initialise all Classes
 GetWeather getWeather = new GetWeather("SE4");
 GameState gameState = new GameState(stateNum);
-BGImage bgimage = new BGImage(bgimages, stateNum);
-
+BGImage bgimage;
 void setup() {
   size(1024, 600);
+  
   
   //getWeather.run();
   
@@ -21,9 +28,10 @@ void setup() {
 }
 
 void draw() { 
-  
+  bgimage = new BGImage(bgimages[imageNum], stateNum);
+  bgimage.run();
   gameState.run();
-  
+  gameState.stateNum = stateNum;
   
   fill(255,0,0);
   noStroke();
