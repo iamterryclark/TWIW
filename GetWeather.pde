@@ -12,7 +12,8 @@ class GetWeather {
   int SShour;
   String forecast;
   String location;
-
+  int animate;
+  
   StringList day = new StringList();
   StringList weather = new StringList();
 
@@ -63,7 +64,7 @@ class GetWeather {
       String weatherStr = weatherObj.getString("@text");
       day.append(dayStr);
       weather.append(weatherStr);
-      println(day.get(i), weather.get(i));
+      println(day.get(i), weather.get(i)); 
     }
     
     //Sunrise and Sunset Info
@@ -72,18 +73,36 @@ class GetWeather {
     println(SRhour, SShour);
   }
 
-  //void ifWind() {
-  //}
+  void Wind() {
+    
 
-  //void ifSun() {
-  //}
+  }
 
-  //void ifRain() {
-  //}
+  void Sun() {
+    PImage sunRay = loadImage("weather/sunny/ray.png");
+    image(sunRay, 20,20);
+    //float x = getBg.sunRadius * cos(radians(i));
+    //float y = getBg.sunRadius * sin(radians(i));
+  }
 
-  //void ifCloud() {
-  //}
+  void Rain() {
+  
+  }
 
-  //void ifSnow() {
-  //}
+  void Cloud(int amount, int imgW, int imgH, int posX, int posY) {
+    String[] cloudName = {"clouds1.png","clouds2.png","clouds3.png" };
+    PImage[] clouds = new PImage[amount]; 
+    
+    for (int i = 0; i < clouds.length; i++) {
+      clouds[i] = loadImage("weather/clouds/" + cloudName[int(random(0, 2))]);
+      image(clouds[i], random(29 ,imgW), random(10.1, imgH), random(0, posX), random(0, posY));
+    }
+    
+    posX = posX + animate;
+    animate--;
+  }
+
+  void Snow() {
+  
+  }
 }
