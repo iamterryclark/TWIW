@@ -1,99 +1,110 @@
+//Team: Adam, Terry, Patricio, Andres, Bevis
+
 import com.temboo.core.*;
 import com.temboo.Library.Yahoo.Weather.*;
 import ddf.minim.*;
+Minim minim;
+AudioPlayer[] audioTrack;
 
-int x, y;
+int x; 
+int y = height - 100;
 int stateNum = 0;
-int imageNum = 0;
 
 //For textBox on first page
 String myText = "";
 String location = "";
 
-String[] bgimages = {
-  "first-background.jpg", 
-  "second-background.png", 
-  "second-background.png", 
-  "second-background.png", 
-  "second-background.png", 
-  "second-background.png", 
-};
-
 //Initialise all Classes
 GetWeather getWeather;
-GameState gameState = new GameState(stateNum);
-GetBg getBg;
-GetChar getChar;
+GameState gameState;
+GetScene getScene;
+GetChar getChar; 
 
 void setup() {
   size(1024, 600);
-  smooth();
 
+  //Char Initial position
+  getChar = new GetChar(0, height - height /4);
+  smooth();
   ellipseMode(CENTER);
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
+
+  getScene = new GetScene();
+
+  minim = new Minim(this); // initialaizing minim object
+  audioTrack = new AudioPlayer[6];
+  for (int i=0; i < audioTrack.length; i++) {
+    audioTrack[i] = minim.loadFile("sounds/"+i+".mp3"); // load file in audio player array loadFile ( "FILE NAME");
+  }
 }
 
 void draw() {
-  //Char Initial position
-  getChar = new GetChar(x, height - height /4 + y);
-
-  //Background Init
-  getBg = new GetBg("backgrounds/" + bgimages[imageNum], stateNum);
-  getBg.run();
-
+  gameState = new GameState(stateNum);
   //GameState Init
   gameState.run();
-  gameState.stateNum = stateNum;
 }
 
 void keyPressed() {
 
   //First Scene TextBox
   if (keyCode == BACKSPACE) {
-    if (myText.length() > 0) {
-      myText = myText.substring(0, myText.length()-1);
+    if (getScene.myText.length() > 0) {
+      getScene.myText = getScene.myText.substring(0, getScene.myText.length()-1);
     }
   } else if (keyCode == DELETE) {
-    myText = "";
+    getScene.myText = "";
   } else if (key == ENTER) {
-    location = myText;
+    location = getScene.myText;
     getWeather = new GetWeather(location);
-    
     while (location != "") {
-      //getWeather.run();
+      getWeather.run();
       location="";
     }
-    
-   
     stateNum = 1;
   } else if (keyCode != SHIFT && keyCode != CONTROL && keyCode != ALT) {
-    myText = myText + key;
+    getScene.myText = getScene.myText + key;
   } 
-  
+
   //Character Animation
-
   if (key == CODED) {
-    if (keyCode == RIGHT) {
-      if (x >= width) {
-
-        //Player Init
-        fill(255, 0, 0);
-        noStroke();
-        x = 0;
+    if (keyCode == RIGHT) {     
+      getChar.moveRight(); 
+      getChar.x+=getChar.xSpeed;
+      
+      if (getChar.x <= 600) {
+        getScene.fade += 4;
+      } else if (getChar.x > 600) {
+        getScene.fade -= 5;
+      }
+      
+      if (getChar.x > width) {
+        getChar.x = 0;
         stateNum += 1;
-      } else {
-        x += 100;
+        getScene.fade = 0;
       }
     }
 
     if (keyCode == LEFT) {
-      if (x <= 0) {
-        x = width;
-        stateNum -= 1;
-      } else {
-        x -= 100;
+      getChar.moveLeft(); 
+      getChar.x -= getChar.xSpeed;
+      
+      if (getChar.x <= 600) {
+        getScene.fade -= 4;
+      } else if (getChar.x > 600) {
+        getScene.fade += 5;
       }
+
+      if (getChar.x <= 0) {
+        getChar.x = width;
+        stateNum -= 1;
+      }
+    }
+    if (keyCode == UP) {
+       getChar.jumpping();
+       y+=getChar.gravity;
+    } else {
+      getChar.standStill();
     }
   }
 }
